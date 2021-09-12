@@ -1,5 +1,5 @@
 const express = require('express');
-
+//Rota Principal do Sistema
 const users_controller = require('./app/Controllers/controller_users');
 const routes = express.Router();
 
