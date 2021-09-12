@@ -13,11 +13,22 @@ require('./app/routers/auth.user')(app);
 require('./app/routers/rotas_usuario')(app);
 
 require('./app/routers/rotas_material')(app);
-require('./app/routers/rotas_funcionario')(app);
+require('./app/routers/rotas_operario')(app);
+
+require('./app/routers/rotas_operario_linha')(app);
 require('./app/routers/rotas_tecido')(app);
 require('./app/routers/rotas_intertela')(app);
 require('./app/routers/rotas_bolso')(app);
+require('./app/routers/rotas_rolos')(app);
+require('./app/routers/rotas_material1')(app);
+
+require('./app/routers/rotas_materialg1')(app);
 require('./app/routers/rotas_cutsheet')(app);
+require('./app/routers/rotas_stock')(app);
+
+
+require('./app/routers/rotas_cutsheetCalsa')(app);
+require('./app/routers/rotas_cutsheetCamisa')(app);
 require('./app/routers/rotas_requisicao')(app);
 app.listen(3333);
 

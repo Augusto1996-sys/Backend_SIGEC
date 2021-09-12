@@ -1,0 +1,43 @@
+Credentials
+SMTP
+
+Host:
+    smtp.mailtrap.io
+Port:
+    25 or 465 or 587 or 2525
+Username:
+    421645d37d7c6b
+Password:
+    224f41f75cfad2
+Auth:
+    PLAIN, LOGIN and CRAM-MD5
+TLS:
+    Optional (STARTTLS on all ports)
+
+POP3
+
+Host:
+    pop3.mailtrap.io
+Port:
+    1100 or 9950
+Username:
+    421645d37d7c6b
+Password:
+    224f41f75cfad2
+Auth:
+    USER/PASS, PLAIN, LOGIN, APOP and CRAM-MD5
+TLS:
+    Optional (STARTTLS on all ports)
+
+Integrations
+
+Nodemailer is an easy to use module to send e-mails with Node.JS:
+
+var transport = nodemailer.createTransport({
+  host: "smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "421645d37d7c6b",
+    pass: "224f41f75cfad2"
+  }
+});

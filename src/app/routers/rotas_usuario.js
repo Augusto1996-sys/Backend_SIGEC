@@ -8,11 +8,10 @@ router.post('/login_users', usuario_controller.autenticacao_usuario);
 router.post('/forgotPassword_users', usuario_controller.esqueci_Senha);
 router.post('/resetPassword_users', usuario_controller.recuperar_senha);
 router.get('/listar_usuario', usuario_controller.listar_usuario);
-router.get('/listusuarioByID/:id', usuario_controller.listusuarioByID);
-router.post('/deleteusuarioByID/:id', usuario_controller.deleteusuario);
-router.post('/editarusuarioByID/', usuario_controller.updateusuario);
+router.post('/editarusuarioByID',usuario_controller.updateUsuario)
+router.get('/listusuarioByID/:id', usuario_controller.listUsuarioByID);
+router.post('/deleteusuarioByID/:id', usuario_controller.deleteUsuario);
 router.get('/checkToken', usuario_controller.checkToken);
-router.post('/updateusuario', usuario_controller.updateusuario);
 router.get('/destroyToken', usuario_controller.destroyToken);
 
 module.exports = app => app.use('/usuario', router);

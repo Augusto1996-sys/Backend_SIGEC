@@ -1,9 +1,10 @@
 const express = require('express');
-const requisicao_controller = require('../Controllers/controller_requisicao');
+const cutsheet_controller = require('../Controllers/controller_cutsheet');
 const router = express.Router();
-router.post('/registar_requisicao', requisicao_controller.registar_requisicao);
-router.post('/listar_requisicao', requisicao_controller.listar_requisicao);
-router.post('/deletar_requisicao/:id', requisicao_controller.deleterequisicao);
-module.exports = app => app.use('/requisicao', router);
+router.post('/registar_cutsheet', cutsheet_controller.registar_cutsheet);
+router.get('/listar_cutsheet', cutsheet_controller.listar_cutsheet);
+router.post('/listar_cutsheetByRecoha', cutsheet_controller.listar_cutsheetByRecolha);
+router.post('/listar_cutsheetByID', cutsheet_controller.listar_cutsheetByID)
+module.exports = app => app.use('/cutsheet', router);
 
 

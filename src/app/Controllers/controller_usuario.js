@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const mailer = require('../../modules/mailer')
 const { Console } = require('console');
-const { destroy } = require('../../database/conenection');
 
 function generetToken(params = {}) {
   return jwt.sign(params,
@@ -17,11 +16,9 @@ function generetToken(params = {}) {
 module.exports = {
   async listar_usuario(request, response) {
     const user = await connection('tb_usuarioc')
-      .join('tb_funcionario', 'tb_usuarioc.fk_id_funcionario', 'tb_funcionario.pk_id_funcionario')
-      .join('tb_linha', 'tb_funcionario.fk_id_linha', 'tb_linha.pk_id_linha')
-      .select('*');
+      .select('*')
+      .orderBy('created_at_usuarioc ', 'desc')
     return response.json(user);
-
 
   },
 
@@ -29,24 +26,25 @@ module.exports = {
 
   async registar_usuario(request, response) {
     const {
-      fk_id_funcionario,
+      fullname,
       email,
       password,
-      isoque,
+      nivel,
       state
     } = request.body;
-
     try {
 
       const user = await connection('tb_usuarioc')
-        .where({ email }).first();
-      if (user) return response.status(400).send({ error: 'verifica seus Dados [email]! Dados ja cadastrados ' });
+        .where({ email })
+        .andWhere({ fullname })
+        .first();
+      if (user) return response.status(400).send({ error: 'verifica seus Dados [Email ou operario]! Dados ja cadastrados ' });
       const password_hash = await bcrypt.hash(password, 10);
       await connection('tb_usuarioc').insert({
-        fk_id_funcionario,
+        fullname,
         email,
-        password,
-        isoque,
+        nivel,
+        password: password_hash,
         state
       });
       const user_Registrado = await connection('tb_usuarioc')
@@ -55,22 +53,33 @@ module.exports = {
       user_Registrado.passwordResetToken = undefined;
       user_Registrado.passwordResetExpires = undefined;
       user_Registrado.update_at = undefined;
-      return response.send({
+      /*return response.send({
         user_Registrado,
         token: generetToken({ id: user_Registrado.id }),
-      });
-    } catch (err) {
-      return response.status(400).send({ error: 'Falha na Operacao! Tente Novamente ' + err });
+      });*/
+
+      return response.status(200).send({ message: 'Operacao Efectuada Com Sucesso' });
+    } catch (error) {
+      return response.status(400).send({ error: 'Falha na Operacao! Tente Novamente ' + error });
     }
   },
-  async deleteusuario(request, response) {
+  async deleteUsuario(request, response) {
     const { id } = request.params;
+    try {
+      const user = await connection('tb_usuarioc')
+        .where('pk_id_usuarioc', id)
+        .select('*').first();
+      if (user) {
+        const deletar = await connection('tb_usuarioc')
+          .where('pk_id_usuarioc', id)
+          .delete();
 
-    const deletar = await connection('tb_usuarioc')
-      .where('pk_id_usuarioc', id)
-      .delete();
+        return response.status(200).send({ message: 'Operacao Efectuada Com Sucesso' });
+      } else response.status(404).send({ message: 'Usuario Nao Encontrado' });
 
-    return response.status(204).send({ message: 'Operacao Efectuada Com Sucesso' });
+    } catch (error) {
+      return response.status(400).send({ error: 'Falha na Operacao! Tente Novamente ' + error });
+    }
 
   },
   async esqueci_Senha(request, response) {
@@ -89,7 +98,7 @@ module.exports = {
         passwordResetExpires.setHours(passwordResetExpires.getHours() + 1);
 
         const setToken = await connection('tb_usuarioc')
-          .where({ pk_id_usuarioc: user.pk_id_usuarioc })
+          .where({ id_users: user.id_users })
           .update({ passwordResetToken, passwordResetExpires, update_at });
         //console.log(user)
         mailer.sendMail({
@@ -111,48 +120,51 @@ module.exports = {
   },
 
 
-  async updateusuario(request, response) {
+  async updateUsuario(request, response) {
     const {
       pk_id_usuarioc,
-      fk_id_funcionario,
+      fullname,
       email,
       password,
-      isoque,
+      nivel,
       state
     } = request.body;
-    const user = await connection('tb_usuarioc')
-      .where('pk_id_usuarioc', pk_id_usuarioc)
-      .select('*').first();
 
-    const password_hash = await bcrypt.hash(password, 10);
-    if (user) {
-      const userUpdate = await connection('tb_usuarioc')
-        .where({ pk_id_usuarioc: user.pk_id_usuarioc })
-        .update({
-          fk_id_funcionario,
-          email,
-          password,
-          isoque,
-          isFielArmazem,
-          isCoordenador,
-          state
-        });
-      return response.json({ status: 200, msg: "usuario Actualizado com Sucesso" });
-    } else if (!user) {
-      return response.json({ status: 404, msg: "Problemas na autenticacao" });
+    try {
+      const user = await connection('tb_usuarioc')
+        .where('pk_id_usuarioc', pk_id_usuarioc)
+        .select('*').first();
+
+      const password_hash = await bcrypt.hash(password, 10);
+      if (user) {
+        const userUpdate = await connection('tb_usuarioc')
+          .where({ pk_id_usuarioc: user.pk_id_usuarioc })
+          .update({
+            fullname,
+            email,
+            password,
+            nivel,
+            state
+          });
+        return response.status(200).send({ status: 200, msg: "Usuario Actualizado com Sucesso" });
+      } else if (!user) {
+        return response.status(404).send({ status: 404, msg: "Problemas na autenticacao" });
+      }
+
+    } catch (error) {
+
+      return response.status(400).send({ error: 'Erro on fogot passoword,  try again. ' + error });
     }
 
   },
 
-  async listusuarioByID(request, response) {
+  async listUsuarioByID(request, response) {
     const { id } = request.params;
-    const usuario = await connection('tb_usuarioc')
-      .join('tb_funcionario', 'tb_usuarioc.fk_id_funcionario', 'tb_funcionario.pk_id_funcionario')
-      .join('tb_linha', 'tb_funcionario.fk_id_linha', 'tb_linha.pk_id_linha')
+    const Usuario = await connection('tb_usuarioc')
       .where('pk_id_usuarioc', id)
       .select('*')
       .first();
-    return response.json(usuario);
+    return response.json(Usuario);
     ///return response.status(200).send({message: 'O Id A listar'+ ' '+id});
 
   },
@@ -162,12 +174,12 @@ module.exports = {
     try {
 
       const user_logado = await connection('tb_usuarioc')
-        .where('email', email_login)
+        .where('tb_usuarioc.email', email_login)
         .select('*')
         .first();
 
       if (!user_logado) {
-        response.status(200).json({ status: 2, error: 'Verifica seus Dados! usuario Invalido' })
+        response.status(400).json({ status: 400, error: 'Verifica seus Dados! Usuario Invalido' })
 
 
       }
@@ -181,8 +193,7 @@ module.exports = {
         user_logado.update_at =undefined;*/
         response.status(200).json({
           status: 1,
-          pk_id_usuarioc: user_logado.pk_id_usuarioc,
-          fk_id_funcionario: user_logado.fk_id_funcionario,
+          id_users: user_logado.id_users,
           email: user_logado.email,
           password: user_logado.password,
           token: generetToken({ id: user_logado.id }),
@@ -206,7 +217,7 @@ module.exports = {
       const user = await connection('tb_usuarioc')
         .where('email', email)
         .select('*').first();
-      if (!user) return response.status(400).send({ error: 'usuario nao encontrado' });
+      if (!user) return response.status(400).send({ error: 'Usuario nao encontrado' });
 
       if (token !== user.passwordResetToken) return response.status(400).send({ error: 'Token Invalido' });
 

@@ -4,11 +4,12 @@ exports.up = function(knex) {
         table.increments('pk_id_material').primary();      
         table.integer('fk_id_referencia').unsigned().notNullable();        
         table.integer('fk_id_cutsheet').unsigned().notNullable();
-        table.integer('fk_id_tamanho').unsigned().notNullable();;
+        table.integer('fk_id_tamanho').unsigned();
         table.string('nome').notNullable();
-        table.integer('quantidade'); 
+        table.string('nome_generico').notNullable();
+        table.integer('quantidade_material'); 
         table.double('dimensao'); 
-        table.string('cor');
+        table.string('cor_material').notNullable();;
         table.string('numero_buracos');
         table.double('metragem'); 
         table.integer('bale_number');
@@ -17,10 +18,10 @@ exports.up = function(knex) {
         table.string('cod_tecido');
         table.string('tamanho');
         table.enum('estado_rolo', ['armazenado','cortado','danificado', 'por_cortar']).defaultTo('armazenado'); 
-        table.string('quantidade_Stock');
         table.string('shade');
-        table.datetime('created_at').defaultTo(knex.fn.now());      
-        table.datetime('update_at').defaultTo(knex.fn.now()); 
+        table.string('invoice_nr');
+        table.datetime('created_at_material').defaultTo(knex.fn.now());      
+        table.datetime('update_at_material').defaultTo(knex.fn.now()); 
   
         table.foreign('fk_id_referencia').references('pk_id_referencia').inTable('tb_referencia_produto');
         table.foreign('fk_id_cutsheet').references('pk_id_cutsheet').inTable('tb_cutsheet');

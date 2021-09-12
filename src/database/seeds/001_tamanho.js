@@ -6,6 +6,8 @@ exports.seed = function(knex) {
       // Inserts seed entries
       return knex('tb_tamanho').insert([
         //Tamanho Etiqueta Camisa
+                   
+        {tamanho: 'none', detalhes:'Material Sem nenhum tipo de Tamanho'},
         {tamanho: '5/6', detalhes:'Tamanho de Etiqueta Para Camisa'},
         {tamanho: '6/7', detalhes:'Tamanho de Etiqueta Para Camisa'},
         {tamanho: '7/8', detalhes:'Tamanho de Etiqueta Para Camisa'},
@@ -47,8 +49,14 @@ exports.seed = function(knex) {
         {tamanho: '12', detalhes:'Tamanho de Etiqueta Para Calsa'},
         {tamanho: '28', detalhes:'Tamanho de Etiqueta Para Calsa'},
         {tamanho: '30', detalhes:'Tamanho de Etiqueta Para Calsa'},        
-        {tamanho: '32', detalhes:'Tamanho de Etiqueta Para Calsa'},               
-        {tamanho: '0', detalhes:'Material Sem nenhum tipo de Tamanho'}
+        {tamanho: '32', detalhes:'Tamanho de Etiqueta Para Calsa'},
+        
+        
+        {tamanho: '14.5', detalhes:'Tamanho de Etiqueta Para Calsa'},
+        {tamanho: '15.5', detalhes:'Tamanho de Etiqueta Para Calsa'},
+        {tamanho: '16.5', detalhes:'Tamanho de Etiqueta Para Calsa'},        
+        {tamanho: '17.5', detalhes:'Tamanho de Etiqueta Para Calsa'},
+        {tamanho: '11.5', detalhes:'Tamanho de Etiqueta Para Calsa'}, 
 
       ]);
     });
