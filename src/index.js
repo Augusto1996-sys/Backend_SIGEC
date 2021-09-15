@@ -9,7 +9,6 @@ app.use(cors()); //Abre as portas para ser acedido pelo sistema que nos quisermi
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 require('./app/routers/rotas_tipo_usuario')(app);
-require('./app/routers/auth.user')(app);
 require('./app/routers/rotas_usuario')(app);
 
 require('./app/routers/rotas_material')(app);

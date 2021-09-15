@@ -142,7 +142,7 @@ module.exports = {
           .update({
             fullname,
             email,
-            password,
+            password :password_hash,
             nivel,
             state
           });

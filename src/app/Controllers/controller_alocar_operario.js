@@ -24,7 +24,7 @@ module.exports = {
       fk_id_operacao,
       fk_id_cutsheet
     } = request.body;
-
+ 
 
     try {
 

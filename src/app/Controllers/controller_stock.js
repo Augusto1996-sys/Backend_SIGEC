@@ -84,7 +84,6 @@ module.exports = {
 
     async listStockBycodCutsheet(request, response) {
         const {codigo_cutsheet} = request.body;
-        ///console.log("eis O CS: "+fk_id_cutsheet)
         const results = await connection('tb_stock')
             .join('tb_cutsheet', 'tb_stock.fk_id_cutsheet', 'tb_cutsheet.pk_id_cutsheet')
             .join('tb_referencia_produto', 'tb_stock.fk_id_referencia', 'tb_referencia_produto.pk_id_referencia')
@@ -95,7 +94,6 @@ module.exports = {
     },
     async listStockByCutsheet(request, response) {
         const {fk_id_cutsheet} = request.body;
-        ///console.log("eis O CS: "+fk_id_cutsheet)
         const results = await connection('tb_stock')
             .join('tb_cutsheet', 'tb_stock.fk_id_cutsheet', 'tb_cutsheet.pk_id_cutsheet')
             .join('tb_referencia_produto', 'tb_stock.fk_id_referencia', 'tb_referencia_produto.pk_id_referencia')

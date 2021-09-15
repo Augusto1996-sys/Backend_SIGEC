@@ -16,7 +16,6 @@ module.exports = {
 
     const { fk_id_funcionario } = request.body;
     id = fk_id_funcionario
-    console.log("ID: "+id);
     const cutsheet = await connection('tb_operario_linha')
       .join('tb_cutsheet', 'tb_operario_linha.fk_id_cutsheet', 'tb_cutsheet.pk_id_cutsheet')
       .join('tb_operario', 'tb_operario_linha.fk_id_operario ', 'tb_operario.pk_id_operario ')

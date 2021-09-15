@@ -6,6 +6,8 @@ const crypto = require('crypto');
  * 
    
  */
+
+
 module.exports = {
   async listar_requisicao(request, response) {
     const requisicao = await connection('tb_material_requisicao')
